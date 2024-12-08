@@ -25,8 +25,10 @@ class LoginView extends StatelessWidget {
             ),
             SizedBox(height: 20),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+              ),
               onPressed: () {
-                // Handle login logic here
                 print("Email: ${emailController.text}");
                 print("Password: ${passwordController.text}");
               },
