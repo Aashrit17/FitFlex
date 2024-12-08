@@ -25,8 +25,10 @@ class RegistrationView extends StatelessWidget {
             ),
             SizedBox(height: 20),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+              ),
               onPressed: () {
-                // Handle registration logic here
                 print("Email: ${emailController.text}");
                 print("Password: ${passwordController.text}");
               },
