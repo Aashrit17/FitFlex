@@ -6,21 +6,28 @@ import 'package:fitflex/view/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      title: 'font and theme',
       initialRoute: '/',
+      theme: ThemeData(
+          primarySwatch: Colors.purple,
+          scaffoldBackgroundColor: Colors.grey,
+          fontFamily: 'Montserrat Bold'),
       routes: {
-        '/login': (context) => LoginView(),
-        '/register': (context) => RegistrationView(),
+        '/login': (context) => const LoginView(),
+        '/register': (context) => const RegistrationView(),
         '/dashboard': (context) => DashboardView(),
         '/': (context) => SplashScreen(),
-        '/onboarding': (context) => OnboardingView(),
+        '/onboarding': (context) => const OnboardingView(),
       },
     );
   }

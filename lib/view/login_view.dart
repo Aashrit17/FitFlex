@@ -75,8 +75,8 @@ class LoginView extends StatelessWidget {
                           Navigator.pushNamed(context, '/dashboard');
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: const Text("Invalid credentials!"),
+                            const SnackBar(
+                              content: Text("Invalid credentials!"),
                               backgroundColor: Colors.red,
                             ),
                           );
@@ -84,7 +84,10 @@ class LoginView extends StatelessWidget {
                       },
                       child: const Text(
                         "Login",
-                        style: TextStyle(fontSize: 18, color: Colors.white),
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                            fontFamily: 'Montserrat Bold'),
                       ),
                     ),
                     const SizedBox(height: 20),
