@@ -1,3 +1,4 @@
+import 'package:fitflex/core/app_theme/app_theme.dart';
 import 'package:fitflex/view/dashboard_view.dart';
 import 'package:fitflex/view/login_view.dart';
 import 'package:fitflex/view/onboarding_view.dart';
@@ -18,14 +19,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'font and theme',
       initialRoute: '/',
-      theme: ThemeData(
-          primarySwatch: Colors.purple,
-          scaffoldBackgroundColor: Colors.grey,
-          fontFamily: 'Montserrat Bold'),
+      theme: getApplicationTheme(),
       routes: {
         '/login': (context) => const LoginView(),
         '/register': (context) => const RegistrationView(),
-        '/dashboard': (context) => DashboardView(),
+        '/dashboard': (context) => const DashboardView(),
         '/': (context) => SplashScreen(),
         '/onboarding': (context) => const OnboardingView(),
       },
