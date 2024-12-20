@@ -55,7 +55,6 @@ class _DashboardViewState extends State<DashboardView> {
   }
 }
 
-// Restored Dashboard Screen
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
@@ -208,7 +207,6 @@ class DashboardScreen extends StatelessWidget {
   }
 }
 
-// Progress Screen with Progress Tracking
 class ProgressScreen extends StatelessWidget {
   const ProgressScreen({super.key});
 
@@ -287,7 +285,6 @@ class ProgressScreen extends StatelessWidget {
   }
 }
 
-// Settings Screen
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
