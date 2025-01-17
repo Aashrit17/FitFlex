@@ -1,4 +1,7 @@
+import 'package:fitflex/features/auth/presentation/view/registration_view.dart';
+import 'package:fitflex/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
@@ -45,7 +48,7 @@ class LoginView extends StatelessWidget {
                     const SizedBox(height: 40),
                     _buildCustomTextField(
                       controller: emailController,
-                      label: "Username",
+                      label: "Email",
                       icon: Icons.email,
                       obscureText: false,
                     ),
@@ -68,19 +71,26 @@ class LoginView extends StatelessWidget {
                         elevation: 0,
                       ),
                       onPressed: () {
-                        String email = emailController.text;
-                        String password = passwordController.text;
+                        // String email = emailController.text;
+                        // String password = passwordController.text;
 
-                        if (email == "admin" && password == "admin") {
-                          Navigator.pushNamed(context, '/dashboard');
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Invalid credentials!"),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
-                        }
+                        // if (email == "admin" && password == "admin") {
+                        //   Navigator.pushNamed(context, '/dashboard');
+                        // } else {
+                        //   ScaffoldMessenger.of(context).showSnackBar(
+                        //     const SnackBar(
+                        //       content: Text("Invalid credentials!"),
+                        //       backgroundColor: Colors.red,
+                        //     ),
+                        //   );
+                        // }
+                        context.read<LoginBloc>().add(
+                              LoginStudentEvent(
+                                context: context,
+                                username: emailController.text,
+                                password: passwordController.text,
+                              ),
+                            );
                       },
                       child: const Text(
                         "Login",
@@ -94,7 +104,12 @@ class LoginView extends StatelessWidget {
                     Center(
                       child: TextButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/register');
+                          context.read<LoginBloc>().add(
+                                NavigateRegisterScreenEvent(
+                                  destination: const RegistrationView(),
+                                  context: context,
+                                ),
+                              );
                         },
                         child: const Text(
                           "Don't have an account? Register",

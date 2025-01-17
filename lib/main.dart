@@ -1,32 +1,17 @@
-import 'package:fitflex/core/app_theme/app_theme.dart';
-import 'package:fitflex/features/view/dashboard_view.dart';
-import 'package:fitflex/features/view/login_view.dart';
-import 'package:fitflex/features/view/onboarding_view.dart';
-import 'package:fitflex/features/view/registration_view.dart';
-import 'package:fitflex/features/view/splash_screen.dart';
+import 'package:fitflex/app/app.dart';
+import 'package:fitflex/app/di/di.dart';
+import 'package:fitflex/core/network/hive_service.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await HiveService.init();
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  // await HiveService().clearStudentBox();
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'font and theme',
-      initialRoute: '/',
-      theme: getApplicationTheme(),
-      routes: {
-        '/login': (context) => const LoginView(),
-        '/register': (context) => const RegistrationView(),
-        '/dashboard': (context) => const DashboardView(),
-        '/': (context) => SplashScreen(),
-        '/onboarding': (context) => const OnboardingView(),
-      },
-    );
-  }
+  await initDependencies();
+
+  runApp(
+    const MyApp(),
+  );
 }

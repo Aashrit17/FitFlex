@@ -4,6 +4,8 @@ import 'package:fitflex/features/auth/domain/entity/auth_entity.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:uuid/uuid.dart';
 
+part 'auth_hive_model.g.dart';
+
 @HiveType(typeId: HiveTableConstant.userTableId)
 class AuthHiveModel extends Equatable {
   @HiveField(0)
@@ -25,7 +27,6 @@ class AuthHiveModel extends Equatable {
     required this.password,
   }) : userId = userId ?? const Uuid().v4();
 
-  // Initial Constructor
   const AuthHiveModel.initial()
       : userId = '',
         name = '',
@@ -33,7 +34,6 @@ class AuthHiveModel extends Equatable {
         phone = '',
         password = '';
 
-  // From Entity
   factory AuthHiveModel.fromEntity(AuthEntity entity) {
     return AuthHiveModel(
       userId: entity.userId,
@@ -44,7 +44,6 @@ class AuthHiveModel extends Equatable {
     );
   }
 
-  // To Entity
   AuthEntity toEntity() {
     return AuthEntity(
       userId: userId,

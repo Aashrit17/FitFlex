@@ -1,10 +1,12 @@
+import 'package:fitflex/features/auth/presentation/view_model/signup/register_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegistrationView extends StatefulWidget {
   const RegistrationView({super.key});
 
   @override
-  _RegistrationViewState createState() => _RegistrationViewState();
+  State<RegistrationView> createState() => _RegistrationViewState();
 }
 
 class _RegistrationViewState extends State<RegistrationView> {
@@ -19,6 +21,11 @@ class _RegistrationViewState extends State<RegistrationView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: BlocBuilder<RegisterBloc, RegisterState>(
+        builder: (context, state) {
+          return const Text("Register");
+        },
+      )),
       body: SingleChildScrollView(
         child: Container(
           color: Colors.black,
@@ -149,14 +156,15 @@ class _RegistrationViewState extends State<RegistrationView> {
                                   ),
                                 );
                               } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text("Registration successful!"),
-                                    backgroundColor: Colors.green,
-                                  ),
-                                );
-
-                                Navigator.pop(context);
+                                context.read<RegisterBloc>().add(
+                                      RegisterUser(
+                                        context: context,
+                                        name: nameController.text,
+                                        email: emailController.text,
+                                        phone: phoneController.text,
+                                        password: passwordController.text,
+                                      ),
+                                    );
                               }
                             },
                             child: const Text(
