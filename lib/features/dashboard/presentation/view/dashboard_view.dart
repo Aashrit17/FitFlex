@@ -1,4 +1,7 @@
+import 'package:fitflex/core/common/snackbar/my_snackbar.dart';
+import 'package:fitflex/features/dashboard/presentation/view_model/home_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DashboardView extends StatefulWidget {
   const DashboardView({super.key});
@@ -20,9 +23,33 @@ class _DashboardViewState extends State<DashboardView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("FitFlex"),
+        title: const Text('FitFlex'),
         backgroundColor: Colors.deepPurple,
-        elevation: 0,
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              // Logout code
+              showMySnackBar(
+                context: context,
+                message: 'Logging out...',
+                color: Colors.red,
+              );
+
+              context.read<HomeCubit>().logout(context);
+            },
+          ),
+          Switch(
+            value: _isDarkTheme,
+            onChanged: (value) {
+              // Change theme
+              // setState(() {
+              //   _isDarkTheme = value;
+              // });
+            },
+          ),
+        ],
       ),
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
