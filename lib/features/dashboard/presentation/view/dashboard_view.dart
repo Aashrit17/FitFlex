@@ -29,6 +29,7 @@ class _DashboardViewState extends State<DashboardView> {
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
+            color: Colors.black,
             onPressed: () {
               // Logout code
               showMySnackBar(
@@ -38,15 +39,6 @@ class _DashboardViewState extends State<DashboardView> {
               );
 
               context.read<HomeCubit>().logout(context);
-            },
-          ),
-          Switch(
-            value: _isDarkTheme,
-            onChanged: (value) {
-              // Change theme
-              // setState(() {
-              //   _isDarkTheme = value;
-              // });
             },
           ),
         ],
