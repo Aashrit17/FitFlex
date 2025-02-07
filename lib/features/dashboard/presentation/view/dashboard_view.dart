@@ -27,6 +27,15 @@ class _DashboardViewState extends State<DashboardView> {
         backgroundColor: Colors.deepPurple,
         centerTitle: true,
         actions: [
+          Switch(
+            value: false,
+            onChanged: (value) {
+              // Change theme
+              // setState(() {
+              //   _isDarkTheme = value;
+              // });
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.logout),
             color: Colors.black,
