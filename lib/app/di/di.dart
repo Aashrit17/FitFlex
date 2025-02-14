@@ -12,6 +12,7 @@ import 'package:fitflex/features/auth/domain/use_case/upload_image_usecase.dart'
 import 'package:fitflex/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:fitflex/features/auth/presentation/view_model/signup/register_bloc.dart';
 import 'package:fitflex/features/dashboard/presentation/view_model/home_cubit.dart';
+import 'package:fitflex/features/splash/presentation/view_model/cubit/onboarding_cubit.dart';
 import 'package:fitflex/features/splash/presentation/view_model/splash_cubit.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,7 +28,7 @@ Future<void> initDependencies() async {
   await _initRegisterDependencies();
   await _initLoginDependencies();
   await _initSharedPreferences();
-
+  await _initOnboardingScreenDependencies();
   await _initSplashScreenDependencies();
 }
 
@@ -118,6 +119,12 @@ _initLoginDependencies() async {
 
 _initSplashScreenDependencies() async {
   getIt.registerFactory<SplashCubit>(
-    () => SplashCubit(getIt<LoginBloc>()),
+    () => SplashCubit(getIt<OnboardingCubit>()),
+  );
+}
+
+_initOnboardingScreenDependencies() async {
+  getIt.registerFactory<OnboardingCubit>(
+    () => OnboardingCubit(),
   );
 }

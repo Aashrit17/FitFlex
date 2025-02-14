@@ -1,7 +1,9 @@
+import 'package:fitflex/features/splash/presentation/view_model/cubit/onboarding_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class OnboardingView extends StatefulWidget {
-  const OnboardingView({Key? key}) : super(key: key);
+  const OnboardingView({super.key});
 
   @override
   _OnboardingScreenState createState() => _OnboardingScreenState();
@@ -135,7 +137,7 @@ class _OnboardingScreenState extends State<OnboardingView> {
           ElevatedButton(
             onPressed: () {
               if (_currentPage == onboardingData.length - 1) {
-                Navigator.pushReplacementNamed(context, '/login');
+                context.read<OnboardingCubit>().goToLogin(context);
               } else {
                 _pageController.nextPage(
                   duration: const Duration(milliseconds: 300),
