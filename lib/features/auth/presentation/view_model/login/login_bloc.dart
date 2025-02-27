@@ -4,6 +4,7 @@ import 'package:fitflex/features/auth/domain/use_case/login_usecase.dart';
 import 'package:fitflex/features/auth/presentation/view_model/signup/register_bloc.dart';
 import 'package:fitflex/features/dashboard/presentation/view/dashboard_view.dart';
 import 'package:fitflex/features/dashboard/presentation/view_model/home_cubit.dart';
+import 'package:fitflex/features/home/presentation/view/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -77,7 +78,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             add(
               NavigateHomeScreenEvent(
                 context: event.context,
-                destination: const DashboardView(),
+                destination: const HomeView(),
               ),
             );
             //_homeCubit.setToken(token);
