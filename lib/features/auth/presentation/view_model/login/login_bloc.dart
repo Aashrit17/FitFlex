@@ -5,6 +5,7 @@ import 'package:fitflex/features/auth/presentation/view_model/signup/register_bl
 import 'package:fitflex/features/dashboard/presentation/view/dashboard_view.dart';
 import 'package:fitflex/features/dashboard/presentation/view_model/home_cubit.dart';
 import 'package:fitflex/features/home/presentation/view/home_view.dart';
+import 'package:fitflex/features/home/presentation/view_model/home_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
