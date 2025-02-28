@@ -12,4 +12,9 @@ class ApiEndpoints {
   static const String login = "auth/login";
   static const String register = "auth/register";
   static const String uploadImage = "auth/uploadImage/";
+
+  static const String createFood = "foods";
+  static const String deleteFood = "foods/";
+  static const String getAllFood = "foods";
+  static const String updateFood = "foods/";
 }
