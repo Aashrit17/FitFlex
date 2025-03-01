@@ -5,13 +5,13 @@ part 'get_all_exercise_dto.g.dart';
 
 @JsonSerializable()
 class GetAllExerciseDTO {
-  final bool success;
-  final int count;
+  // final bool success;
+  // final int count;
   final List<ExerciseApiModel> data;
 
   GetAllExerciseDTO({
-    required this.success,
-    required this.count,
+    // required this.success,
+    // required this.count,
     required this.data,
   });
 

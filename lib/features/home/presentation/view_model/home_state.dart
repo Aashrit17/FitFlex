@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:fitflex/app/di/di.dart';
+import 'package:fitflex/features/exercise/presentation/view/exercise_view.dart';
+import 'package:fitflex/features/exercise/presentation/view_model/exercise_bloc.dart';
 import 'package:fitflex/features/food/presentation/view/food_view.dart';
 import 'package:fitflex/features/food/presentation/view_model/food_bloc.dart';
 import 'package:flutter/material.dart';
@@ -23,8 +25,9 @@ class HomeState extends Equatable {
           create: (context) => getIt<FoodBloc>(),
           child: FoodPage(),
         ),
-        const Center(
-          child: Text('Exercise'),
+        BlocProvider(
+          create: (context) => getIt<ExerciseBloc>(),
+          child: const ExercisePage(),
         ),
         const Center(
           child: Text('Progress'),
