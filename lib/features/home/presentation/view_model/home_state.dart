@@ -1,5 +1,9 @@
 import 'package:equatable/equatable.dart';
+import 'package:fitflex/app/di/di.dart';
+import 'package:fitflex/features/food/presentation/view/food_view.dart';
+import 'package:fitflex/features/food/presentation/view_model/food_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeState extends Equatable {
   final int selectedIndex;
@@ -12,19 +16,20 @@ class HomeState extends Equatable {
 
   // Initial state
   static HomeState initial() {
-    return const HomeState(
+    return HomeState(
       selectedIndex: 0,
       views: [
-        Center(
-          child: Text('Food'),
+        BlocProvider(
+          create: (context) => getIt<FoodBloc>(),
+          child: FoodPage(),
         ),
-        Center(
+        const Center(
           child: Text('Exercise'),
         ),
-        Center(
+        const Center(
           child: Text('Progress'),
         ),
-        Center(
+        const Center(
           child: Text('Account'),
         ),
       ],

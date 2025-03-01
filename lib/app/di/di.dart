@@ -11,7 +11,12 @@ import 'package:fitflex/features/auth/domain/use_case/register_user_usecase.dart
 import 'package:fitflex/features/auth/domain/use_case/upload_image_usecase.dart';
 import 'package:fitflex/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:fitflex/features/auth/presentation/view_model/signup/register_bloc.dart';
-import 'package:fitflex/features/dashboard/presentation/view_model/home_cubit.dart';
+import 'package:fitflex/features/food/data/data_source/remote_data_source/food_remote_data_source.dart';
+import 'package:fitflex/features/food/data/repository/food_remote_repository.dart';
+import 'package:fitflex/features/food/domain/use_case/create_food_use_case.dart';
+import 'package:fitflex/features/food/domain/use_case/delete_food_use_case.dart';
+import 'package:fitflex/features/food/domain/use_case/get_all_food_use_case.dart';
+import 'package:fitflex/features/food/presentation/view_model/food_bloc.dart';
 import 'package:fitflex/features/home/presentation/view_model/home_cubit.dart';
 import 'package:fitflex/features/splash/presentation/view_model/cubit/onboarding_cubit.dart';
 import 'package:fitflex/features/splash/presentation/view_model/splash_cubit.dart';
@@ -31,6 +36,7 @@ Future<void> initDependencies() async {
   await _initSharedPreferences();
   await _initOnboardingScreenDependencies();
   await _initSplashScreenDependencies();
+  await _initFoodDependencies();
 }
 
 Future<void> _initSharedPreferences() async {
@@ -114,6 +120,55 @@ _initLoginDependencies() async {
       registerBloc: getIt<RegisterBloc>(),
       homeCubit: getIt<HomeCubit>(),
       loginUseCase: getIt<LoginUseCase>(),
+    ),
+  );
+}
+
+_initFoodDependencies() async {
+  // =========================== Data Source ===========================
+  // getIt.registerFactory<BatchLocalDataSource>(
+  //     () => BatchLocalDataSource(hiveService: getIt<HiveService>()));
+
+  getIt.registerLazySingleton<FoodRemoteDataSource>(
+    () => FoodRemoteDataSource(
+      getIt<Dio>(),
+    ),
+  );
+
+  // =========================== Repository ===========================
+
+  // getIt.registerLazySingleton<ItemLocalRepository>(() => BatchLocalRepository(
+  //     batchLocalDataSource: getIt<BatchLocalDataSource>()));
+
+  getIt.registerLazySingleton(
+    () => FoodRemoteRepository(
+      remoteDataSource: getIt<FoodRemoteDataSource>(),
+    ),
+  );
+
+  // =========================== Usecases ===========================
+
+  getIt.registerLazySingleton<CreateFoodUseCase>(
+    () => CreateFoodUseCase(foodRepository: getIt<FoodRemoteRepository>()),
+  );
+
+  getIt.registerLazySingleton<GetAllFoodUseCase>(
+    () => GetAllFoodUseCase(foodRepository: getIt<FoodRemoteRepository>()),
+  );
+
+  getIt.registerLazySingleton<DeleteFoodUsecase>(
+    () => DeleteFoodUsecase(
+      foodRepository: getIt<FoodRemoteRepository>(),
+      tokenSharedPrefs: getIt<TokenSharedPrefs>(),
+    ),
+  );
+
+  // =========================== Bloc ===========================
+  getIt.registerFactory<FoodBloc>(
+    () => FoodBloc(
+      createFoodUseCase: getIt<CreateFoodUseCase>(),
+      getAllFoodUseCase: getIt<GetAllFoodUseCase>(),
+      deleteFoodUsecase: getIt<DeleteFoodUsecase>(),
     ),
   );
 }
