@@ -11,6 +11,12 @@ import 'package:fitflex/features/auth/domain/use_case/register_user_usecase.dart
 import 'package:fitflex/features/auth/domain/use_case/upload_image_usecase.dart';
 import 'package:fitflex/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:fitflex/features/auth/presentation/view_model/signup/register_bloc.dart';
+import 'package:fitflex/features/exercise/data/data_source/remote_data_source/exercise_remote_data_source.dart';
+import 'package:fitflex/features/exercise/data/repository/exercise_remote_repository.dart';
+import 'package:fitflex/features/exercise/domain/use_case/create_exercise_use_case%20copy.dart';
+import 'package:fitflex/features/exercise/domain/use_case/delete_exercise_use_case%20copy%202.dart';
+import 'package:fitflex/features/exercise/domain/use_case/get_all_exercise_use_case.dart';
+import 'package:fitflex/features/exercise/presentation/view_model/exercise_bloc.dart';
 import 'package:fitflex/features/food/data/data_source/remote_data_source/food_remote_data_source.dart';
 import 'package:fitflex/features/food/data/repository/food_remote_repository.dart';
 import 'package:fitflex/features/food/domain/use_case/create_food_use_case.dart';
@@ -37,6 +43,7 @@ Future<void> initDependencies() async {
   await _initOnboardingScreenDependencies();
   await _initSplashScreenDependencies();
   await _initFoodDependencies();
+  await _initExerciseDependencies();
 }
 
 Future<void> _initSharedPreferences() async {
@@ -169,6 +176,57 @@ _initFoodDependencies() async {
       createFoodUseCase: getIt<CreateFoodUseCase>(),
       getAllFoodUseCase: getIt<GetAllFoodUseCase>(),
       deleteFoodUsecase: getIt<DeleteFoodUsecase>(),
+    ),
+  );
+}
+
+_initExerciseDependencies() async {
+  // =========================== Data Source ===========================
+  // getIt.registerFactory<BatchLocalDataSource>(
+  //     () => BatchLocalDataSource(hiveService: getIt<HiveService>()));
+
+  getIt.registerLazySingleton<ExerciseRemoteDataSource>(
+    () => ExerciseRemoteDataSource(
+      getIt<Dio>(),
+    ),
+  );
+
+  // =========================== Repository ===========================
+
+  // getIt.registerLazySingleton<ItemLocalRepository>(() => BatchLocalRepository(
+  //     batchLocalDataSource: getIt<BatchLocalDataSource>()));
+
+  getIt.registerLazySingleton(
+    () => ExerciseRemoteRepository(
+      remoteDataSource: getIt<ExerciseRemoteDataSource>(),
+    ),
+  );
+
+  // =========================== Usecases ===========================
+
+  getIt.registerLazySingleton<CreateExerciseUseCase>(
+    () => CreateExerciseUseCase(
+        exerciseRepository: getIt<ExerciseRemoteRepository>()),
+  );
+
+  getIt.registerLazySingleton<GetAllExerciseUseCase>(
+    () => GetAllExerciseUseCase(
+        exerciseRepository: getIt<ExerciseRemoteRepository>()),
+  );
+
+  getIt.registerLazySingleton<DeleteExerciseUsecase>(
+    () => DeleteExerciseUsecase(
+      exerciseRepository: getIt<ExerciseRemoteRepository>(),
+      tokenSharedPrefs: getIt<TokenSharedPrefs>(),
+    ),
+  );
+
+  // =========================== Bloc ===========================
+  getIt.registerFactory<ExerciseBloc>(
+    () => ExerciseBloc(
+      createExerciseUseCase: getIt<CreateExerciseUseCase>(),
+      getAllExerciseUseCase: getIt<GetAllExerciseUseCase>(),
+      deleteExerciseUsecase: getIt<DeleteExerciseUsecase>(),
     ),
   );
 }
