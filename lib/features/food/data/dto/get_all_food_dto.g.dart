@@ -8,8 +8,6 @@ part of 'get_all_food_dto.dart';
 
 GetAllFoodDTO _$GetAllFoodDTOFromJson(Map<String, dynamic> json) =>
     GetAllFoodDTO(
-      success: json['success'] as bool,
-      count: (json['count'] as num).toInt(),
       data: (json['data'] as List<dynamic>)
           .map((e) => FoodApiModel.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -17,7 +15,5 @@ GetAllFoodDTO _$GetAllFoodDTOFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$GetAllFoodDTOToJson(GetAllFoodDTO instance) =>
     <String, dynamic>{
-      'success': instance.success,
-      'count': instance.count,
       'data': instance.data,
     };

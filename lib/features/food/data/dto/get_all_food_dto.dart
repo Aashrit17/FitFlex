@@ -5,13 +5,9 @@ part 'get_all_food_dto.g.dart';
 
 @JsonSerializable()
 class GetAllFoodDTO {
-  final bool success;
-  final int count;
   final List<FoodApiModel> data;
 
   GetAllFoodDTO({
-    required this.success,
-    required this.count,
     required this.data,
   });
 

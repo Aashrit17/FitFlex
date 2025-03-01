@@ -17,4 +17,9 @@ class ApiEndpoints {
   static const String deleteFood = "foods/";
   static const String getAllFood = "foods";
   static const String updateFood = "foods/";
+
+  static const String createExercise = "exercises";
+  static const String deleteExercise = "exercises/";
+  static const String getAllExercise = "exercises";
+  static const String updateExercise = "exercises/";
 }
