@@ -10,9 +10,12 @@ class ProgressRemoteRepository implements IProgressRepository {
   ProgressRemoteRepository({required this.remoteDataSource});
 
   @override
-  Future<Either<Failure, List<ProgressEntity>>> getProgress() async {
+  Future<Either<Failure, List<ProgressHistoryEntity>>> getProgress(
+      String? token, String id) async {
     try {
-      final progresses = await remoteDataSource.getProgress();
+      print("gwatch: $id");
+      final progresses = await remoteDataSource.getProgress(id);
+      print("pro:$progresses");
       return Right(progresses);
     } catch (e) {
       return Left(
@@ -36,4 +39,10 @@ class ProgressRemoteRepository implements IProgressRepository {
       );
     }
   }
+
+  // @override
+  // getAllProgress({required userId}) {
+  //   // TODO: implement getAllProgress
+  //   throw UnimplementedError();
+  // }
 }

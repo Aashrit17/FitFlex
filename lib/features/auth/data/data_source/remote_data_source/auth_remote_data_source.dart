@@ -5,6 +5,7 @@ import 'package:fitflex/app/constants/api_endpoints.dart';
 import 'package:fitflex/app/shared_prefs/token_shared_prefs.dart';
 import 'package:fitflex/features/auth/data/data_source/auth_data_source.dart';
 import 'package:fitflex/features/auth/domain/entity/auth_entity.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthRemoteDatasource implements IAuthDataSource {
   final Dio _dio;
@@ -78,6 +79,9 @@ class AuthRemoteDatasource implements IAuthDataSource {
       );
       if (response.statusCode == 200) {
         userIdSharedPrefs.setUser(response.data['user']);
+        var userId = response.data['userId'];
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('userID', userId);
         return response.data['token'];
       } else {
         throw Exception(response.statusMessage);

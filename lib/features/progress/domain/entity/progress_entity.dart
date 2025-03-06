@@ -16,24 +16,24 @@ class ProgressEntity extends Equatable {
 }
 
 class ProgressHistoryEntity extends Equatable {
-  final DateTime date;
-  final int waterIntake;
-  final int exerciseMinutes;
-  final String exerciseName;
-  final int caloriesConsumed;
-  final String foodName;
-  final int caloriesBurned;
-  final int sleepHours;
+  final DateTime? date;
+  final int? waterIntake;
+  final int? exerciseMinutes;
+  final String? exerciseName;
+  final int? caloriesConsumed;
+  final String? foodName;
+  final int? caloriesBurned;
+  final int? sleepHours;
 
   const ProgressHistoryEntity({
-    required this.date,
-    required this.waterIntake,
-    required this.exerciseMinutes,
-    required this.exerciseName,
-    required this.caloriesConsumed,
-    required this.foodName,
-    required this.caloriesBurned,
-    required this.sleepHours,
+    this.date,
+    this.waterIntake,
+    this.exerciseMinutes,
+    this.exerciseName,
+    this.caloriesConsumed,
+    this.foodName,
+    this.caloriesBurned,
+    this.sleepHours,
   });
 
   @override

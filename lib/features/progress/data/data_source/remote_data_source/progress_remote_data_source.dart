@@ -5,7 +5,6 @@ import 'package:fitflex/features/progress/data/dto/get_all_progress_dto.dart';
 import 'package:fitflex/features/progress/data/model/progress_api_model.dart';
 import 'package:fitflex/features/progress/domain/entity/progress_entity.dart';
 
-
 class ProgressRemoteDataSource implements IProgressDataSource {
   final Dio _dio;
 
@@ -31,11 +30,12 @@ class ProgressRemoteDataSource implements IProgressDataSource {
       throw Exception(e);
     }
   }
+
   @override
-  Future<List<ProgressEntity>> getProgress() async {
+  Future<List<ProgressHistoryEntity>> getProgress(String id) async {
     try {
       var response = await _dio.get(
-        ApiEndpoints.getAllProgress,
+        '${ApiEndpoints.getAllProgress}$id',
       );
 
       GetAllProgressDTO progressDTO = GetAllProgressDTO.fromJson(response.data);

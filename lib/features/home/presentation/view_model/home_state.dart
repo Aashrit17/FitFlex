@@ -28,7 +28,7 @@ class HomeState extends Equatable {
       views: [
         BlocProvider(
           create: (context) => getIt<FoodBloc>(),
-          child: FoodPage(),
+          child: const FoodPage(),
         ),
         BlocProvider(
           create: (context) => getIt<ExerciseBloc>(),
@@ -36,7 +36,7 @@ class HomeState extends Equatable {
         ),
         BlocProvider(
           create: (context) => getIt<ProgressBloc>(),
-          child: const ProgressPage(),
+          child: ProgressPage(),
         ),
         BlocProvider(
           create: (context) => getIt<ProfileBloc>(),

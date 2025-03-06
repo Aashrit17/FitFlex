@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:fitflex/features/exercise/presentation/view_model/exercise_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ExercisePage extends StatefulWidget {
   const ExercisePage({super.key});
@@ -167,6 +171,7 @@ class _ExercisePageState extends State<ExercisePage>
     );
   }
 
+// In your _logExerciseTab method:
   Widget _logExerciseTab() {
     String? selectedExerciseName;
 
@@ -224,9 +229,10 @@ class _ExercisePageState extends State<ExercisePage>
                   );
                 }).toList(),
                 onChanged: (value) {
-                  setState(() {
-                    selectedExerciseName = value;
-                  });
+                  selectedExerciseName =
+                      value; // Directly update the local variable.
+                  print(
+                      'Exercise selected: $selectedExerciseName'); // Debugging the selection
                 },
               ),
               const SizedBox(height: 10),
@@ -241,21 +247,38 @@ class _ExercisePageState extends State<ExercisePage>
                   backgroundColor: Colors.purple,
                   foregroundColor: Colors.white,
                 ),
-                onPressed: () {
+                onPressed: () async {
+                  print('Selected Exercise: $selectedExerciseName');
+                  print('Duration: ${_logDurationController.text}');
                   if (selectedExerciseName != null &&
                       _logDurationController.text.isNotEmpty) {
-                    // TODO: Log the exercise (with selectedExerciseName and duration)
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content:
-                            Text('$selectedExerciseName logged successfully!'),
-                        backgroundColor: Colors.green,
-                      ),
+                    // Proceed to log the exercise
+                    final response = await _updateExercise(
+                      selectedExerciseName!,
+                      int.parse(_logDurationController.text),
                     );
-                    setState(() {
-                      selectedExerciseName = null;
-                    });
-                    _logDurationController.clear();
+
+                    if (response['success']) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                              '$selectedExerciseName logged successfully!'),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                      setState(() {
+                        selectedExerciseName =
+                            null; // Clear selection after logging
+                      });
+                      _logDurationController.clear();
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(response['message']),
+                          backgroundColor: Colors.redAccent,
+                        ),
+                      );
+                    }
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
@@ -273,6 +296,35 @@ class _ExercisePageState extends State<ExercisePage>
         );
       },
     );
+  }
+
+// API request function to update the exercise
+  Future<Map<String, dynamic>> _updateExercise(
+      String exerciseName, int exerciseMinutes) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final userId = prefs.getString('userID');
+      print("useri dis $userId"); // You should pass the correct user ID
+      final url = Uri.parse(
+          'http://10.0.2.2:3000/api/v1/progress/$userId/updateExercise');
+
+      final response = await http.put(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'exerciseName': exerciseName,
+          'exerciseMinutes': exerciseMinutes,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        return {'success': false, 'message': 'Failed to update exercise'};
+      }
+    } catch (e) {
+      return {'success': false, 'message': 'Error: $e'};
+    }
   }
 
   Widget _buildTextField(

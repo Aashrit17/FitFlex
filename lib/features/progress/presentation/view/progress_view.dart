@@ -1,105 +1,123 @@
-import 'package:fitflex/features/progress/presentation/view_model/progress_bloc.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
+import 'dart:convert';
 
-class ProgressPage extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+class ProgressPage extends StatefulWidget {
   const ProgressPage({super.key});
+
+  @override
+  _ProgressPageState createState() => _ProgressPageState();
+}
+
+class _ProgressPageState extends State<ProgressPage> {
+  List<dynamic> progressData = []; // Initialize as an empty list
+
+  Future<void> fetchUserProgress() async {
+    const userId = '67c40b9a2d032af832aebfd0';
+    final response = await http
+        .get(Uri.parse('http://10.0.2.2:3000/api/v1/progress/$userId'));
+
+    if (response.statusCode == 200) {
+      setState(() {
+        // Reverse the list to show the most recent data on top
+        progressData = (json.decode(response.body)['data'] ?? [])
+            .reversed
+            .toList(); // Reversing the list to show the latest entries first
+      });
+    } else {
+      throw Exception('Failed to load user progress data');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserProgress(); // Fetch user progress on init
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('Progress History'),
-        backgroundColor: Colors.purple,
+        title: const Text('User Progress'),
+        backgroundColor: Colors.purple, // Purple color for app bar
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: BlocBuilder<ProgressBloc, ProgressState>(
-          builder: (context, state) {
-            if (state.isLoading) {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.deepPurple,
-                ),
-              );
-            }
+      backgroundColor: Colors.black, // Black background for entire page
+      body: progressData.isEmpty
+          ? const Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(
+                    Colors.purple), // Purple loading spinner
+              ),
+            )
+          : CustomScrollView(
+              slivers: [
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      final progressEntry = progressData[index];
 
-            if (state.error != null) {
-              return Center(
-                child: Text(
-                  'Error: ${state.error}',
-                  style: const TextStyle(color: Colors.redAccent),
-                ),
-              );
-            }
+                      // Safely extract data with fallback values
+                      final exerciseName =
+                          progressEntry['exerciseName'] ?? 'No Exercise';
+                      final foodName =
+                          progressEntry['foodName'] ?? 'No Food Logged';
+                      final waterIntake = progressEntry['waterIntake'] ?? 0;
+                      final exerciseMinutes =
+                          progressEntry['exerciseMinutes'] ?? 0;
+                      final caloriesConsumed =
+                          progressEntry['caloriesConsumed'] ?? 0;
+                      final caloriesBurned =
+                          progressEntry['caloriesBurned'] ?? 0;
+                      final sleepHours = progressEntry['sleepHours'] ?? 0;
 
-            if (state.progress.isEmpty) {
-              return const Center(
-                child: Text(
-                  'No progress data found.',
-                  style: TextStyle(color: Colors.white),
-                ),
-              );
-            }
-
-            return ListView.builder(
-              itemCount: state.progress.length,
-              itemBuilder: (context, index) {
-                final progress = state.progress[index];
-                return Card(
-                  color: Colors.grey[900],
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                  child: ExpansionTile(
-                    title: Text(
-                      'User ID: ${progress.userId}',
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                    subtitle: Text(
-                      'Goal Calories: ${progress.goalCalories} kcal',
-                      style: const TextStyle(color: Colors.white70),
-                    ),
-                    children: progress.progressHistory.map((entry) {
-                      return ListTile(
-                        title: Text(
-                          DateFormat('yyyy-MM-dd').format(entry.date),
-                          style: const TextStyle(color: Colors.purpleAccent),
-                        ),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _infoText(
-                                'Water Intake', '${entry.waterIntake} ml'),
-                            _infoText('Exercise',
-                                '${entry.exerciseName} (${entry.exerciseMinutes} mins)'),
-                            _infoText('Calories Consumed',
-                                '${entry.caloriesConsumed} kcal'),
-                            _infoText('Food', entry.foodName),
-                            _infoText('Calories Burned',
-                                '${entry.caloriesBurned} kcal'),
-                            _infoText('Sleep Hours', '${entry.sleepHours} hrs'),
-                          ],
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Card(
+                          color: Colors.grey[850], // Dark gray card background
+                          elevation: 4,
+                          child: ListTile(
+                            title: Text(
+                              'Date: ${progressEntry['date']}',
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Exercise: $exerciseName',
+                                    style:
+                                        const TextStyle(color: Colors.white)),
+                                Text('Food: $foodName',
+                                    style:
+                                        const TextStyle(color: Colors.white)),
+                                Text('Water Intake: ${waterIntake}ml',
+                                    style:
+                                        const TextStyle(color: Colors.white)),
+                                Text('Exercise Minutes: $exerciseMinutes',
+                                    style:
+                                        const TextStyle(color: Colors.white)),
+                                Text('Calories Consumed: $caloriesConsumed',
+                                    style:
+                                        const TextStyle(color: Colors.white)),
+                                Text('Calories Burned: $caloriesBurned',
+                                    style:
+                                        const TextStyle(color: Colors.white)),
+                                Text('Sleep Hours: $sleepHours',
+                                    style:
+                                        const TextStyle(color: Colors.white)),
+                              ],
+                            ),
+                          ),
                         ),
                       );
-                    }).toList(),
+                    },
+                    childCount:
+                        progressData.length, // Provide the correct count
                   ),
-                );
-              },
-            );
-          },
-        ),
-      ),
-    );
-  }
-
-  Widget _infoText(String title, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 4),
-      child: Text(
-        '$title: $value',
-        style: const TextStyle(color: Colors.white70, fontSize: 14),
-      ),
+                ),
+              ],
+            ),
     );
   }
 }

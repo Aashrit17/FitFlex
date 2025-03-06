@@ -271,7 +271,9 @@ _initProgressDependencies() async {
 
   getIt.registerLazySingleton<GetAllProgressUseCase>(
     () => GetAllProgressUseCase(
-        progressRepository: getIt<ProgressRemoteRepository>()),
+      progressRepository: getIt<ProgressRemoteRepository>(),
+      tokenSharedPrefs: getIt<TokenSharedPrefs>(),
+    ),
   );
 
   // getIt.registerLazySingleton<DeleteProgressUsecase>(

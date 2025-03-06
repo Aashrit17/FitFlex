@@ -8,15 +8,15 @@ part 'progress_api_model.g.dart'; // This part will generate the .g.dart file
 class ProgressApiModel extends Equatable {
   @JsonKey(name: '_id')
   final String? progressId;
-  final String userId;
+  final String? userId;
   final List<ProgressHistoryModel> progressHistory;
-  final int goalCalories;
+  final int? goalCalories;
 
   const ProgressApiModel({
     this.progressId,
-    required this.userId,
+    this.userId,
     required this.progressHistory,
-    required this.goalCalories,
+    this.goalCalories,
   });
 
   const ProgressApiModel.empty()
@@ -26,22 +26,33 @@ class ProgressApiModel extends Equatable {
         goalCalories = 2000;
 
   // From JSON (with generator)
-  factory ProgressApiModel.fromJson(Map<String, dynamic> json) =>
-      _$ProgressApiModelFromJson(json);
+  factory ProgressApiModel.fromJson(Map<String, dynamic> json) {
+    return ProgressApiModel(
+      progressId: json['_id'] as String?,
+      userId: json['userId'] as String?,
+      progressHistory: (json['progressHistory'] as List<dynamic>?)
+              ?.map((e) =>
+                  ProgressHistoryModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [], // Default to an empty list if null
+      goalCalories: json['goalCalories'] as int?,
+    );
+  }
 
   // To JSON (with generator)
   Map<String, dynamic> toJson() => _$ProgressApiModelToJson(this);
 
   // Convert API Object to Entity
   ProgressEntity toEntity() => ProgressEntity(
-        userId: userId,
+        userId: userId ?? '', // Provide a default empty string if null
         progressHistory: progressHistory.map((e) => e.toEntity()).toList(),
-        goalCalories: goalCalories,
+        goalCalories: goalCalories ?? 0, // Provide default 0 if null
       );
 
   // Convert Entity to API Object
   static ProgressApiModel fromEntity(ProgressEntity entity) => ProgressApiModel(
-        progressId: '', // Assuming no progressId in the entity, adjust if needed
+        progressId:
+            '', // Assuming no progressId in the entity, adjust if needed
         userId: entity.userId,
         progressHistory: entity.progressHistory
             .map((e) => ProgressHistoryModel.fromEntity(e))
@@ -50,38 +61,51 @@ class ProgressApiModel extends Equatable {
       );
 
   // Convert API List to Entity List
-  static List<ProgressEntity> toEntityList(List<ProgressApiModel> models) =>
-      models.map((model) => model.toEntity()).toList();
+static List<ProgressHistoryEntity> toEntityList(List<ProgressApiModel> models) {
+  return models.expand((model) => model.progressHistory.map((historyModel) => historyModel.toEntity())).toList();
+}
 
   @override
-  List<Object?> get props => [progressId, userId, progressHistory, goalCalories];
+  List<Object?> get props =>
+      [progressId, userId, progressHistory, goalCalories];
 }
 
 @JsonSerializable()
 class ProgressHistoryModel extends Equatable {
-  final DateTime date;
-  final int waterIntake;
-  final int exerciseMinutes;
-  final String exerciseName;
-  final int caloriesConsumed;
-  final String foodName;
-  final int caloriesBurned;
-  final int sleepHours;
+  final DateTime? date;
+  final int? waterIntake;
+  final int? exerciseMinutes;
+  final String? exerciseName;
+  final int? caloriesConsumed;
+  final String? foodName;
+  final int? caloriesBurned;
+  final int? sleepHours;
 
   const ProgressHistoryModel({
-    required this.date,
-    required this.waterIntake,
-    required this.exerciseMinutes,
-    required this.exerciseName,
-    required this.caloriesConsumed,
-    required this.foodName,
-    required this.caloriesBurned,
-    required this.sleepHours,
+    this.date,
+    this.waterIntake,
+    this.exerciseMinutes,
+    this.exerciseName,
+    this.caloriesConsumed,
+    this.foodName,
+    this.caloriesBurned,
+    this.sleepHours,
   });
 
   // From JSON (with generator)
-  factory ProgressHistoryModel.fromJson(Map<String, dynamic> json) =>
-      _$ProgressHistoryModelFromJson(json);
+  factory ProgressHistoryModel.fromJson(Map<String, dynamic> json) {
+    return ProgressHistoryModel(
+      date:
+          json['date'] != null ? DateTime.parse(json['date'] as String) : null,
+      waterIntake: json['waterIntake'] as int?,
+      exerciseMinutes: json['exerciseMinutes'] as int?,
+      exerciseName: json['exerciseName'] as String?,
+      caloriesConsumed: json['caloriesConsumed'] as int?,
+      foodName: json['foodName'] as String?,
+      caloriesBurned: json['caloriesBurned'] as int?,
+      sleepHours: json['sleepHours'] as int?,
+    );
+  }
 
   // To JSON (with generator)
   Map<String, dynamic> toJson() => _$ProgressHistoryModelToJson(this);

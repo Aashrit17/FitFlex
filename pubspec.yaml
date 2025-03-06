@@ -57,6 +57,7 @@ dependencies:
   flutter_test:
     sdk: flutter
   intl: ^0.20.2
+  sensors_plus: ^6.1.1
 
 
 dev_dependencies:

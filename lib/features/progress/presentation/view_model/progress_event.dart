@@ -1,8 +1,5 @@
 part of 'progress_bloc.dart';
 
-
-
-
 @immutable
 sealed class ProgressEvent extends Equatable {
   const ProgressEvent();
@@ -20,8 +17,6 @@ class LoadImage extends ProgressEvent {
     required this.file,
   });
 }
-
-
 
 // final class AddProgress extends ProgressEvent {
 //   final String progressName;

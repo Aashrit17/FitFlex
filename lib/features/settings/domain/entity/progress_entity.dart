@@ -6,7 +6,7 @@ class ProgressEntryEntity extends Equatable {
   final int exerciseMinutes; // minutes
   final String exerciseName;
   final int caloriesConsumed; // kcal
-  final String foodName;
+  final String? foodName;
   final int caloriesBurned; // kcal
   final int sleepHours; // hours
 
@@ -16,7 +16,7 @@ class ProgressEntryEntity extends Equatable {
     required this.exerciseMinutes,
     required this.exerciseName,
     required this.caloriesConsumed,
-    required this.foodName,
+    this.foodName,
     required this.caloriesBurned,
     required this.sleepHours,
   });

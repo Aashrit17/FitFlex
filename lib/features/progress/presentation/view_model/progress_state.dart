@@ -1,8 +1,7 @@
 part of 'progress_bloc.dart';
 
-
 class ProgressState extends Equatable {
-  final List<ProgressEntity> progress;
+  final List<ProgressHistoryEntity> progress;
   final bool isLoading;
   final String? error;
 
@@ -20,7 +19,7 @@ class ProgressState extends Equatable {
   }
 
   ProgressState copyWith({
-    List<ProgressEntity>? progress,
+    List<ProgressHistoryEntity>? progress,
     bool? isLoading,
     String? error,
   }) {

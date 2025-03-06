@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:fitflex/features/food/presentation/view_model/food_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FoodPage extends StatefulWidget {
   const FoodPage({super.key});
@@ -160,6 +164,7 @@ class _FoodPageState extends State<FoodPage>
   }
 
   Widget _buildLogFoodTab() {
+    final SharedPreferences sharedprefs;
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: BlocBuilder<FoodBloc, FoodState>(
@@ -207,17 +212,49 @@ class _FoodPageState extends State<FoodPage>
                   backgroundColor: Colors.purple,
                   foregroundColor: Colors.white,
                 ),
-                onPressed: () {
+                onPressed: () async {
                   if (selectedFoodId != null &&
                       _quantityController.text.isNotEmpty) {
-                    // Handle log food logic here
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Food logged successfully!'),
-                        backgroundColor: Colors.green,
-                      ),
+                    // Send the API request to log the food
+                    int caloriesConsumed = int.parse(_quantityController.text);
+                    String foodName = state.foods
+                        .firstWhere((food) => food.id == selectedFoodId)
+                        .name;
+
+                    // Replace with actual user ID from your authentication context
+                    final prefs = await SharedPreferences.getInstance();
+                    final userId = prefs.getString('userID');
+                    print("useri dis $userId");
+
+                    final response = await http.put(
+                      Uri.parse(
+                          'http://10.0.2.2:3000/api/v1/progress/$userId/updateCaloriesConsumed'),
+                      headers: <String, String>{
+                        'Content-Type': 'application/json',
+                      },
+                      body: jsonEncode({
+                        'caloriesConsumed': caloriesConsumed,
+                        'foodName': foodName,
+                      }),
                     );
-                    _quantityController.clear();
+
+                    if (response.statusCode == 200) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Food logged successfully!'),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                      _quantityController.clear();
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                              'Error: ${jsonDecode(response.body)['message']}'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
                   }
                 },
                 child: const Text('Log Food'),
