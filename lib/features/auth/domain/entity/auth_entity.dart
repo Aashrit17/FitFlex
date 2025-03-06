@@ -19,4 +19,15 @@ class AuthEntity extends Equatable {
 
   @override
   List<Object?> get props => [userId, name, email, phone, password];
+
+  static fromJson(Map<String, dynamic> userMap) {
+    return AuthEntity(
+      userId: userMap['userId'],
+      name: userMap['name'] ?? '',
+      email: userMap['email'] ?? '',
+      phone: userMap['phone'] ?? '',
+      image: userMap['image'],
+      password: '',
+    );
+  }
 }

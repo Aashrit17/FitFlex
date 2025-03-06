@@ -27,7 +27,7 @@ class ExerciseApiModel extends Equatable {
     return ExerciseApiModel(
       exerciseId: json['_id']?.toString() ?? '',
       exerciseName: json['name']?.toString() ?? '',
-      exerciseCalorie: json['calorie'] ?? 0,
+      exerciseCalorie: json['caloriesBurnedPerMinute'] ?? 0,
     );
   }
 
@@ -36,7 +36,7 @@ class ExerciseApiModel extends Equatable {
     return {
       '_id': exerciseId,
       'name': exerciseName,
-      'calorie': exerciseCalorie,
+      'caloriesBurnedPerMinute': exerciseCalorie,
     };
   }
 
@@ -58,6 +58,5 @@ class ExerciseApiModel extends Equatable {
       models.map((model) => model.toEntity()).toList();
 
   @override
-  List<Object?> get props =>
-      [exerciseId, exerciseName, exerciseCalorie];
+  List<Object?> get props => [exerciseId, exerciseName, exerciseCalorie];
 }

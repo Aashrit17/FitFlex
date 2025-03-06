@@ -1,22 +1,22 @@
-import 'package:fitflex/features/exercise/data/model/exercise_api_model.dart';
+import 'package:fitflex/features/progress/data/model/progress_api_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'get_all_exercise_dto.g.dart';
+part 'get_all_progress_dto.g.dart';
 
 @JsonSerializable()
-class GetAllExerciseDTO {
+class GetAllProgressDTO {
   // final bool success;
   // final int count;
-  final List<ExerciseApiModel> data;
+  final List<ProgressApiModel> data;
 
-  GetAllExerciseDTO({
+  GetAllProgressDTO({
     // required this.success,
     // required this.count,
     required this.data,
   });
 
-  Map<String, dynamic> toJson() => _$GetAllExerciseDTOToJson(this);
+  Map<String, dynamic> toJson() => _$GetAllProgressDTOToJson(this);
 
-  factory GetAllExerciseDTO.fromJson(Map<String, dynamic> json) =>
-      _$GetAllExerciseDTOFromJson(json);
+  factory GetAllProgressDTO.fromJson(Map<String, dynamic> json) =>
+      _$GetAllProgressDTOFromJson(json);
 }
