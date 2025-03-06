@@ -11,11 +11,6 @@ class AuthRemoteRepository implements IAuthRepository {
   AuthRemoteRepository(this._authRemoteDatasource);
 
   @override
-  Future<Either<Failure, AuthEntity>> getCurrentUser() {
-    throw UnimplementedError();
-  }
-
-  @override
   Future<Either<Failure, String>> loginUser(
       String email, String password) async {
     try {
@@ -42,6 +37,39 @@ class AuthRemoteRepository implements IAuthRepository {
       return Right(_authRemoteDatasource.registerUser(user));
     } catch (e) {
       return Left(LocalDatabaseFailure(message: e.toString()));
+    }
+  }
+  @override
+  Future<Either<Failure, AuthEntity>> getCurrentUser(
+      String? token, String userID) async {
+    try {
+      final user = await _authRemoteDatasource.getCurrentUser(token, userID);
+      print("USERRR:: $user");
+      return Right(user);
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, AuthEntity>> updateUser(AuthEntity user) async {
+    print('User update response:::::::');
+    try {
+      // var newUser = AuthEntity(
+      //   fname: user.fname,
+      //   lname: user.lname,
+      //   email: user.email,
+      //   phoneNo: user.phoneNo,
+      //   address: user.address,
+      //   username: user.address,
+      //   password: currentUser.,
+      // );
+      final response = await _authRemoteDatasource.updateUser(user);
+      print("User update response::: $response");
+      return Right(response);
+    } catch (e) {
+      print('ERROR $e');
+      return Left(ApiFailure(message: e.toString()));
     }
   }
 }

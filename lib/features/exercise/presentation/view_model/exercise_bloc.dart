@@ -3,10 +3,9 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fitflex/features/exercise/domain/entity/exercise_entity.dart';
-import 'package:fitflex/features/exercise/domain/use_case/create_exercise_use_case%20copy.dart';
-import 'package:fitflex/features/exercise/domain/use_case/delete_exercise_use_case%20copy%202.dart';
+import 'package:fitflex/features/exercise/domain/use_case/create_exercise_use_case.dart';
+import 'package:fitflex/features/exercise/domain/use_case/delete_exercise_use_case.dart';
 import 'package:fitflex/features/exercise/domain/use_case/get_all_exercise_use_case.dart';
-
 import 'package:flutter/foundation.dart';
 
 part 'exercise_event.dart';

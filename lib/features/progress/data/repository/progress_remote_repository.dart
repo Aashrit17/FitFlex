@@ -1,20 +1,22 @@
 import 'package:dartz/dartz.dart';
 import 'package:fitflex/core/error/failure.dart';
-import 'package:fitflex/features/exercise/data/data_source/remote_data_source/exercise_remote_data_source.dart';
-import 'package:fitflex/features/exercise/domain/entity/exercise_entity.dart';
-import 'package:fitflex/features/exercise/domain/repository/exercise_repository.dart';
+import 'package:fitflex/features/progress/data/data_source/remote_data_source/progress_remote_data_source.dart';
+import 'package:fitflex/features/progress/domain/entity/progress_entity.dart';
+import 'package:fitflex/features/progress/domain/repository/progress_repository.dart';
 
+class ProgressRemoteRepository implements IProgressRepository {
+  final ProgressRemoteDataSource remoteDataSource;
 
-class ExerciseRemoteRepository implements IExerciseRepository {
-  final ExerciseRemoteDataSource remoteDataSource;
-
-  ExerciseRemoteRepository({required this.remoteDataSource});
+  ProgressRemoteRepository({required this.remoteDataSource});
 
   @override
-  Future<Either<Failure, void>> createExercise(ExerciseEntity exercise) async {
+  Future<Either<Failure, List<ProgressHistoryEntity>>> getProgress(
+      String? token, String id) async {
     try {
-      remoteDataSource.createExercise(exercise);
-      return Right(null);
+      print("gwatch: $id");
+      final progresses = await remoteDataSource.getProgress(id);
+      print("pro:$progresses");
+      return Right(progresses);
     } catch (e) {
       return Left(
         ApiFailure(
@@ -25,10 +27,10 @@ class ExerciseRemoteRepository implements IExerciseRepository {
   }
 
   @override
-  Future<Either<Failure, void>> deleteExercise(String id, String? token) async {
+  Future<Either<Failure, void>> createProgress(ProgressEntity progress) async {
     try {
-      remoteDataSource.deleteExercise(id, token);
-      return Right(null);
+      remoteDataSource.createProgress(progress);
+      return const Right(null);
     } catch (e) {
       return Left(
         ApiFailure(
@@ -38,17 +40,9 @@ class ExerciseRemoteRepository implements IExerciseRepository {
     }
   }
 
-  @override
-  Future<Either<Failure, List<ExerciseEntity>>> getExercises() async {
-    try {
-      final exercises = await remoteDataSource.getExercises();
-      return Right(exercises);
-    } catch (e) {
-      return Left(
-        ApiFailure(
-          message: e.toString(),
-        ),
-      );
-    }
-  }
+  // @override
+  // getAllProgress({required userId}) {
+  //   // TODO: implement getAllProgress
+  //   throw UnimplementedError();
+  // }
 }

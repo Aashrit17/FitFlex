@@ -1,7 +1,7 @@
-import 'package:fitflex/features/exercise/domain/entity/exercise_entity.dart';
+import 'package:fitflex/features/progress/domain/entity/progress_entity.dart';
 
-abstract interface class IExerciseDataSource {
-  Future<List<ExerciseEntity>> getExercises();
-  Future<void> createExercise(ExerciseEntity exercise);
-  Future<void> deleteExercise(String id, String? token);
+abstract interface class IProgressDataSource {
+  Future<List<ProgressHistoryEntity>> getProgress(String id);
+  Future<void> createProgress(ProgressEntity progress);
+  // Future<void> deleteProgress(String id, String? token);
 }

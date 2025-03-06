@@ -1,10 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:fitflex/core/error/failure.dart';
-import 'package:fitflex/features/exercise/domain/entity/exercise_entity.dart';
+import 'package:fitflex/features/progress/domain/entity/progress_entity.dart';
 
 
-abstract interface class IExerciseRepository {
-  Future<Either<Failure, List<ExerciseEntity>>> getExercises();
-  Future<Either<Failure, void>> createExercise(ExerciseEntity item);
-  Future<Either<Failure, void>> deleteExercise(String id, String? token);
+abstract interface class IProgressRepository {
+  Future<Either<Failure, List<ProgressHistoryEntity>>> getProgress(String? token, String id);
+  Future<Either<Failure, void>> createProgress(ProgressEntity item);
+
+  // getAllProgress({required userId}) {}
+//   Future<Either<Failure, void>> deleteProgress(String id, String? token);
 }

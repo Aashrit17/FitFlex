@@ -1,24 +1,23 @@
 import 'package:dio/dio.dart';
 import 'package:fitflex/app/constants/api_endpoints.dart';
-import 'package:fitflex/features/exercise/data/data_source/exercise_data_source.dart';
-import 'package:fitflex/features/exercise/data/dto/get_all_exercise_dto.dart';
-import 'package:fitflex/features/exercise/data/model/exercise_api_model.dart';
-import 'package:fitflex/features/exercise/domain/entity/exercise_entity.dart';
+import 'package:fitflex/features/progress/data/data_source/progress_data_source.dart';
+import 'package:fitflex/features/progress/data/dto/get_all_progress_dto.dart';
+import 'package:fitflex/features/progress/data/model/progress_api_model.dart';
+import 'package:fitflex/features/progress/domain/entity/progress_entity.dart';
 
-
-class ExerciseRemoteDataSource implements IExerciseDataSource {
+class ProgressRemoteDataSource implements IProgressDataSource {
   final Dio _dio;
 
-  ExerciseRemoteDataSource(this._dio);
+  ProgressRemoteDataSource(this._dio);
 
   @override
-  Future<void> createExercise(ExerciseEntity exercise) async {
+  Future<void> createProgress(ProgressEntity progress) async {
     try {
       // Convert entity to model
-      var exerciseApiModel = ExerciseApiModel.fromEntity(exercise);
+      var progressApiModel = ProgressApiModel.fromEntity(progress);
       var response = await _dio.post(
-        ApiEndpoints.createExercise,
-        data: exerciseApiModel.toJson(),
+        ApiEndpoints.createProgress,
+        data: progressApiModel.toJson(),
       );
       if (response.statusCode == 201) {
         return;
@@ -33,38 +32,14 @@ class ExerciseRemoteDataSource implements IExerciseDataSource {
   }
 
   @override
-  Future<void> deleteExercise(String id, String? token) async {
-    try {
-      var response = await _dio.delete(
-        ApiEndpoints.deleteExercise + id,
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer $token',
-          },
-        ),
-      );
-
-      if (response.statusCode == 200) {
-        return;
-      } else {
-        throw Exception(response.statusMessage);
-      }
-    } on DioException catch (e) {
-      throw Exception(e);
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
-
-  @override
-  Future<List<ExerciseEntity>> getExercises() async {
+  Future<List<ProgressHistoryEntity>> getProgress(String id) async {
     try {
       var response = await _dio.get(
-        ApiEndpoints.getAllExercise,
+        '${ApiEndpoints.getAllProgress}$id',
       );
 
-      GetAllExerciseDTO exerciseDTO = GetAllExerciseDTO.fromJson(response.data);
-      return ExerciseApiModel.toEntityList(exerciseDTO.data);
+      GetAllProgressDTO progressDTO = GetAllProgressDTO.fromJson(response.data);
+      return ProgressApiModel.toEntityList(progressDTO.data);
     } on DioException catch (e) {
       throw Exception((e));
     } catch (e) {
